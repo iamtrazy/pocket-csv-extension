@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pocket CSV",
-  "version": "1.0.8",
+  "version": "1.0.7",
   "description": "Simple CSV bookmark manager with favicon previews and search functionality",
   "permissions": ["storage", "activeTab"],
   "action": {
@@ -21,7 +21,7 @@
     "128": "icon128.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "web_accessible_resources": [{
     "resources": ["settings.html"],
