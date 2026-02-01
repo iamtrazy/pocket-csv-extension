@@ -1,0 +1,7 @@
+# Build artifacts
+*.xpi
+*.zip
+web-ext-artifacts/
+
+# Mozilla signing
+.amo-upload-uuid
