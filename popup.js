@@ -11,6 +11,7 @@ class PocketCSV {
   async init() {
     try {
       await this.load();
+      await this.loadState();
       this.bind();
       this.render();
     } catch (error) {
@@ -18,11 +19,19 @@ class PocketCSV {
     }
   }
 
+  async loadState() {
+    const result = await chrome.storage.local.get(['currentPage']);
+    this.page = result.currentPage || 1;
+  }
+
+  async saveState() {
+    await chrome.storage.local.set({currentPage: this.page});
+  }
+
   bind() {
     document.getElementById('addBtn').onclick = () => this.add();
     document.getElementById('settingsBtn').onclick = () => this.showSettings();
     document.getElementById('searchInput').oninput = (e) => this.search(e.target.value);
-    document.getElementById('exportBtn').onclick = () => this.export();
   }
 
   showSettings() {
@@ -120,6 +129,7 @@ class PocketCSV {
       const title = document.createElement('div');
       title.className = 'bookmark-title';
       title.textContent = bookmark.title;
+      title.title = bookmark.title; // Show full title on hover
       
       const url = document.createElement('div');
       url.className = 'bookmark-url';
@@ -313,6 +323,7 @@ class PocketCSV {
 
   goTo(page) {
     this.page = page;
+    this.saveState(); // Remember current page
     this.render();
   }
 
@@ -340,22 +351,6 @@ class PocketCSV {
       this.filter();
       this.render();
     }
-  }
-
-  export() {
-    const today = new Date().toISOString().split('T')[0];
-    const csv = 'url;title;tags;created_at\n' + 
-      this.bookmarks.map(b => `${b.url};${b.title.replace(/;/g, ',')};${b.tags};${b.created_at}`).join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pocket-export-${today}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   }
 }
 
