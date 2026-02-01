@@ -9,4 +9,5 @@ Thumbs.db
 .idea/
 *.zip
 *.xpi
-build-release.sh
+.amo-upload-uuid
+web-ext-artifacts/
