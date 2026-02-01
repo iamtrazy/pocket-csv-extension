@@ -21,7 +21,7 @@
     "128": "icon128.svg"
   },
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "web_accessible_resources": [{
     "resources": ["settings.html"],
