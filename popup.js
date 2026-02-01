@@ -108,38 +108,95 @@ class PocketCSV {
       const div = document.createElement('div');
       div.className = 'bookmark';
       
-      const template = document.createElement('template');
-      template.innerHTML = `
-        <img class="favicon" src="${this.favicon(bookmark.url)}" onerror="this.style.display='none'">
-        <div class="bookmark-info">
-          <div class="bookmark-title"></div>
-          <div class="bookmark-url"></div>
-          <div class="bookmark-date"></div>
-        </div>
-        <div class="actions">
-          <button class="edit-btn">✏️</button>
-          <button class="delete-btn">🗑️</button>
-        </div>
-        <div class="edit-form">
-          <input type="text" class="edit-url">
-          <input type="text" class="edit-title">
-          <button class="save-btn">Save</button>
-          <button class="cancel-btn">Cancel</button>
-        </div>
-        <div class="delete-confirm">
-          <span>Delete this bookmark?</span>
-          <button class="confirm-yes">Delete</button>
-          <button class="confirm-no">Cancel</button>
-        </div>
-      `;
+      // Create elements safely without innerHTML
+      const favicon = document.createElement('img');
+      favicon.className = 'favicon';
+      favicon.src = this.favicon(bookmark.url);
+      favicon.onerror = () => favicon.style.display = 'none';
       
-      div.appendChild(template.content.cloneNode(true));
+      const bookmarkInfo = document.createElement('div');
+      bookmarkInfo.className = 'bookmark-info';
       
-      div.querySelector('.bookmark-title').textContent = bookmark.title;
-      div.querySelector('.bookmark-url').textContent = bookmark.url;
-      div.querySelector('.bookmark-date').textContent = new Date(bookmark.created_at * 1000).toLocaleDateString();
-      div.querySelector('.edit-url').value = bookmark.url;
-      div.querySelector('.edit-title').value = bookmark.title;
+      const title = document.createElement('div');
+      title.className = 'bookmark-title';
+      title.textContent = bookmark.title;
+      
+      const url = document.createElement('div');
+      url.className = 'bookmark-url';
+      url.textContent = bookmark.url;
+      
+      const date = document.createElement('div');
+      date.className = 'bookmark-date';
+      date.textContent = new Date(bookmark.created_at * 1000).toLocaleDateString();
+      
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      
+      const editBtn = document.createElement('button');
+      editBtn.className = 'edit-btn';
+      editBtn.textContent = '✏️';
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = '🗑️';
+      
+      const editForm = document.createElement('div');
+      editForm.className = 'edit-form';
+      
+      const editUrl = document.createElement('input');
+      editUrl.type = 'text';
+      editUrl.className = 'edit-url';
+      editUrl.value = bookmark.url;
+      
+      const editTitle = document.createElement('input');
+      editTitle.type = 'text';
+      editTitle.className = 'edit-title';
+      editTitle.value = bookmark.title;
+      
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.textContent = 'Save';
+      
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'cancel-btn';
+      cancelBtn.textContent = 'Cancel';
+      
+      const deleteConfirm = document.createElement('div');
+      deleteConfirm.className = 'delete-confirm';
+      
+      const confirmText = document.createElement('span');
+      confirmText.textContent = 'Delete this bookmark?';
+      
+      const confirmYes = document.createElement('button');
+      confirmYes.className = 'confirm-yes';
+      confirmYes.textContent = 'Delete';
+      
+      const confirmNo = document.createElement('button');
+      confirmNo.className = 'confirm-no';
+      confirmNo.textContent = 'Cancel';
+      
+      // Assemble elements
+      bookmarkInfo.appendChild(title);
+      bookmarkInfo.appendChild(url);
+      bookmarkInfo.appendChild(date);
+      
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+      
+      editForm.appendChild(editUrl);
+      editForm.appendChild(editTitle);
+      editForm.appendChild(saveBtn);
+      editForm.appendChild(cancelBtn);
+      
+      deleteConfirm.appendChild(confirmText);
+      deleteConfirm.appendChild(confirmYes);
+      deleteConfirm.appendChild(confirmNo);
+      
+      div.appendChild(favicon);
+      div.appendChild(bookmarkInfo);
+      div.appendChild(actions);
+      div.appendChild(editForm);
+      div.appendChild(deleteConfirm);
       
       this.bindBookmarkEvents(div, bookmark);
       container.appendChild(div);
