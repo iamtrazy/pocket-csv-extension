@@ -129,7 +129,25 @@ class PocketCSV {
       const title = document.createElement('div');
       title.className = 'bookmark-title';
       title.textContent = bookmark.title;
-      title.title = bookmark.title; // Show full title on hover
+      title.addEventListener('mouseenter', (e) => {
+        if (bookmark.title.length > 30) {
+          const tooltip = document.createElement('div');
+          tooltip.className = 'custom-tooltip';
+          tooltip.textContent = bookmark.title;
+          tooltip.style.cssText = 'position:absolute;background:#333;color:white;padding:4px 8px;border-radius:4px;font-size:12px;z-index:1000;max-width:200px;word-wrap:break-word;';
+          document.body.appendChild(tooltip);
+          const rect = e.target.getBoundingClientRect();
+          tooltip.style.left = rect.left + 'px';
+          tooltip.style.top = (rect.bottom + 5) + 'px';
+          e.target._tooltip = tooltip;
+        }
+      });
+      title.addEventListener('mouseleave', (e) => {
+        if (e.target._tooltip) {
+          document.body.removeChild(e.target._tooltip);
+          e.target._tooltip = null;
+        }
+      });
       
       const url = document.createElement('div');
       url.className = 'bookmark-url';
