@@ -9,4 +9,3 @@ Thumbs.db
 .idea/
 *.zip
 *.xpi
-!pocket-csv-extension.xpi
