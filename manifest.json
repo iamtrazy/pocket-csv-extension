@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Pocket CSV",
+  "version": "1.0.0",
+  "description": "Simple CSV bookmark manager with favicon previews and search functionality",
+  "permissions": ["storage", "activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Pocket CSV - Bookmark Manager",
+    "default_icon": {
+      "16": "icon16.svg",
+      "32": "icon32.svg",
+      "48": "icon48.svg",
+      "128": "icon128.svg"
+    }
+  },
+  "icons": {
+    "16": "icon16.svg",
+    "32": "icon32.svg", 
+    "48": "icon48.svg",
+    "128": "icon128.svg"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "web_accessible_resources": [{
+    "resources": ["settings.html"],
+    "matches": ["<all_urls>"]
+  }],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pocket-csv@iamtrazy.dev",
+      "update_url": "https://raw.githubusercontent.com/iamtrazy/pocket-csv-extension/main/updates.json"
+    }
+  }
+}

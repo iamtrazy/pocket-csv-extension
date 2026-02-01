@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Settings - Pocket CSV</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+    h1 { color: #007cba; }
+    .section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+    .import-area { border: 2px dashed #ccc; padding: 30px; text-align: center; margin: 20px 0; }
+    .import-area:hover { border-color: #007cba; }
+    input[type="file"] { margin: 20px 0; font-size: 16px; }
+    button { padding: 12px 24px; background: #007cba; color: white; border: none; cursor: pointer; margin: 10px; font-size: 16px; }
+    button:hover { opacity: 0.9; }
+    .status { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .stats { background: #e7f3ff; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Pocket CSV Settings</h1>
+  
+  <div class="section">
+    <h2>Import Bookmarks</h2>
+    <div class="import-area">
+      <h3>Select your CSV file</h3>
+      <input type="file" id="fileInput" accept=".csv">
+      <br>
+      <button id="importBtn">Import CSV</button>
+    </div>
+    <div id="importStatus" class="status" style="display: none;"></div>
+  </div>
+  
+  <div class="section">
+    <h2>Export Bookmarks</h2>
+    <p>Download all your bookmarks as a CSV file</p>
+    <button id="exportBtn">Export CSV</button>
+    <div id="exportStatus" class="status" style="display: none;"></div>
+  </div>
+  
+  <div class="section">
+    <h2>Statistics</h2>
+    <div id="stats" class="stats">Loading...</div>
+  </div>
+  
+  <script src="settings.js"></script>
+</body>
+</html>

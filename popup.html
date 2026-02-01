@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg: #fff; --header-bg: #f5f5f5; --border: #ddd; --text: #333; 
+      --text-secondary: #666; --text-tertiary: #999; --hover: #f9f9f9; 
+      --primary: #007cba; --primary-text: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a; --header-bg: #2d2d2d; --border: #444; --text: #e0e0e0; 
+        --text-secondary: #b0b0b0; --text-tertiary: #888; --hover: #333; 
+        --primary: #0066cc; --primary-text: #fff;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { width: 400px; margin: 0; font: 13px Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .header { padding: 10px; background: var(--header-bg); border-bottom: 1px solid var(--border); }
+    .search-row { display: flex; gap: 5px; margin-bottom: 10px; }
+    .search-row input { flex: 1; padding: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+    .btn { padding: 6px 12px; border: none; background: var(--primary); color: var(--primary-text); cursor: pointer; font-size: 12px; }
+    .btn:hover { opacity: 0.9; }
+    .btn-small { padding: 4px 8px; font-size: 11px; }
+    .controls { display: flex; justify-content: space-between; align-items: center; }
+    .bookmarks { max-height: 400px; overflow-y: auto; }
+    .bookmark { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid var(--border); cursor: pointer; position: relative; }
+    .bookmark:hover { background: var(--hover); }
+    .bookmark:hover .actions { opacity: 1; }
+    .favicon { width: 16px; height: 16px; margin-right: 8px; flex-shrink: 0; }
+    .bookmark-info { flex: 1; min-width: 0; }
+    .bookmark-title { font-weight: bold; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bookmark-url { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bookmark-date { font-size: 10px; color: var(--text-tertiary); }
+    .actions { position: absolute; right: 8px; opacity: 0; transition: opacity 0.2s; display: flex; gap: 3px; }
+    .actions button { padding: 2px 5px; font-size: 11px; border: none; cursor: pointer; border-radius: 2px; }
+    .edit-btn { background: #28a745; color: white; }
+    .delete-btn { background: #dc3545; color: white; }
+    .pagination { padding: 10px; text-align: center; background: var(--header-bg); display: flex; justify-content: center; gap: 3px; }
+    .pagination button { padding: 4px 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; font-size: 12px; }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination .current { background: var(--primary); color: var(--primary-text); }
+    .settings-content { padding: 20px; }
+    .setting-group { margin-bottom: 20px; }
+    .setting-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+    .file-buttons { display: flex; gap: 10px; }
+    .edit-form { display: none; padding: 5px; background: var(--header-bg); border: 1px solid var(--border); }
+    .edit-form input { width: 100%; padding: 4px; margin: 2px 0; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+    .edit-form button { padding: 3px 8px; margin: 2px; font-size: 11px; }
+    .delete-confirm { display: none; padding: 5px; background: #ffe6e6; border: 1px solid #ff9999; color: #cc0000; }
+    .delete-confirm button { padding: 3px 8px; margin: 2px; font-size: 11px; }
+    .confirm-yes { background: #dc3545; color: white; }
+    .confirm-no { background: #6c757d; color: white; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <!-- Main Screen -->
+  <div id="mainScreen" class="screen active">
+    <div class="header">
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="Search bookmarks...">
+        <button class="btn" id="addBtn">Add</button>
+      </div>
+      <div class="controls">
+        <button class="btn btn-small" id="settingsBtn">⚙️ Settings</button>
+        <span id="totalCount">0 bookmarks</span>
+      </div>
+    </div>
+    <div class="bookmarks" id="bookmarks"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Settings Screen -->
+  <div id="settingsScreen" class="screen">
+    <div class="header">
+      <div class="controls">
+        <button class="btn btn-small" id="backBtn">← Back</button>
+        <h3 style="margin: 0;">Settings</h3>
+        <div></div>
+      </div>
+    </div>
+    <div class="settings-content">
+      <div class="setting-group">
+        <label>Data Management</label>
+        <div class="file-buttons">
+          <button class="btn" id="importBtn">Import CSV</button>
+          <button class="btn" id="exportBtn">Export CSV</button>
+          <button class="btn" id="testBtn">Add Test</button>
+        </div>
+        <div id="importArea" class="hidden" style="margin-top: 10px;">
+          <label>Paste your CSV content here:</label>
+          <textarea id="csvContent" style="width: 100%; height: 100px; margin: 5px 0;"></textarea>
+          <button class="btn" id="pasteImportBtn">Import from Text</button>
+          <button class="btn" id="cancelImportBtn">Cancel</button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <label>Statistics</label>
+        <div id="stats">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept=".csv" class="hidden">
+  <input type="text" id="saveInput" class="hidden">
+  <script src="popup.js"></script>
+</body>
+</html>
